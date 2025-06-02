@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Balloon Gyro Demo</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: linear-gradient(to top, #87ceeb, #ffffff);
+      height: 100vh;
+    }
+
+    .balloon {
+      position: absolute;
+      width: 60px;
+      height: 80px;
+      background: radial-gradient(circle at 30% 30%, #ff4d4d, #cc0000);
+      border-radius: 50% 50% 45% 45%;
+      box-shadow: inset -5px -10px 10px rgba(0, 0, 0, 0.1);
+      animation: floatUp 3s ease-out forwards;
+    }
+
+    .string {
+      position: absolute;
+      width: 2px;
+      height: 40px;
+      background: #444;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    @keyframes floatUp {
+      from {
+        transform: translateY(100vh);
+      }
+      to {
+        transform: translateY(20vh);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="balloon" id="balloon1" style="left: 30%; top: 60vh;">
+    <div class="string"></div>
+  </div>
+  <div class="balloon" id="balloon2" style="left: 50%; top: 60vh;">
+    <div class="string"></div>
+  </div>
+  <div class="balloon" id="balloon3" style="left: 70%; top: 60vh;">
+    <div class="string"></div>
+  </div>
+
+  <script>
+    const balloons = document.querySelectorAll('.balloon');
+
+    function handleOrientation(event) {
+      const gamma = event.gamma || 0; // left/right tilt
+      const beta = event.beta || 0;   // front/back tilt
+
+      balloons.forEach((balloon, index) => {
+        const x = gamma * 1.5;
+        const y = beta * 0.5;
+        balloon.style.transform = `translate(${x}px, ${y - 60}px)`;
+      });
+    }
+
+    function requestPermission() {
+      if (typeof DeviceOrientationEvent !== 'undefined' &&
+          typeof DeviceOrientationEvent.requestPermission === 'function') {
+        DeviceOrientationEvent.requestPermission()
+          .then(permissionState => {
+            if (permissionState === 'granted') {
+              window.addEventListener('deviceorientation', handleOrientation);
+            } else {
+              alert('Permission denied for motion data');
+            }
+          })
+          .catch(console.error);
+      } else {
+        // Non-iOS devices
+        window.addEventListener('deviceorientation', handleOrientation);
+      }
+    }
+
+    window.addEventListener('click', requestPermission);
+  </script>
+</body>
+</html>
