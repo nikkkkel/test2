@@ -11,6 +11,7 @@
       overflow: hidden;
       background: linear-gradient(to top, #87ceeb, #ffffff);
       height: 100vh;
+      position: relative;
     }
 
     .balloon {
@@ -20,39 +21,44 @@
       background: radial-gradient(circle at 30% 30%, #ff4d4d, #cc0000);
       border-radius: 50% 50% 45% 45%;
       box-shadow: inset -5px -10px 10px rgba(0, 0, 0, 0.1);
+      left: 50%;
+      transform: translateX(-50%);
       animation: floatUp 3s ease-out forwards;
     }
 
     .string {
       position: absolute;
       width: 2px;
-      height: 40px;
       background: #444;
-      top: 100%;
+      bottom: 0;
       left: 50%;
       transform: translateX(-50%);
     }
 
-    @keyframes floatUp {
-      from {
-        transform: translateY(100vh);
-      }
-      to {
-        transform: translateY(20vh);
-      }
+    @keyframes floatUp1 {
+      from { bottom: 0; }
+      to { bottom: 50vh; }
+    }
+    @keyframes floatUp2 {
+      from { bottom: 0; }
+      to { bottom: 45vh; }
+    }
+    @keyframes floatUp3 {
+      from { bottom: 0; }
+      to { bottom: 55vh; }
     }
   </style>
 </head>
 <body>
 
-  <div class="balloon" id="balloon1" style="left: 30%; top: 60vh;">
-    <div class="string"></div>
+  <div class="balloon" id="balloon1" style="left: 30%; animation: floatUp1 3s ease-out forwards;">
+    <div class="string" style="height: 50vh;"></div>
   </div>
-  <div class="balloon" id="balloon2" style="left: 50%; top: 60vh;">
-    <div class="string"></div>
+  <div class="balloon" id="balloon2" style="left: 50%; animation: floatUp2 3s ease-out forwards;">
+    <div class="string" style="height: 45vh;"></div>
   </div>
-  <div class="balloon" id="balloon3" style="left: 70%; top: 60vh;">
-    <div class="string"></div>
+  <div class="balloon" id="balloon3" style="left: 70%; animation: floatUp3 3s ease-out forwards;">
+    <div class="string" style="height: 55vh;"></div>
   </div>
 
   <script>
@@ -65,7 +71,7 @@
       balloons.forEach((balloon, index) => {
         const x = gamma * 1.5;
         const y = beta * 0.5;
-        balloon.style.transform = `translate(${x}px, ${y - 60}px)`;
+        balloon.style.transform = `translate(${x}px, ${y}px)`;
       });
     }
 
